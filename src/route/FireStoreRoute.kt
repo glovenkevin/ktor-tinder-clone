@@ -46,5 +46,13 @@ fun Route.fireStoreRoute() {
             call.respond(response)
         }
 
+        get("/getListImage/{email}") {
+            val email = call.parameters["email"] ?: return@get call.respond(
+                Response(503, "Bad Request", "Data tidak lengkap")
+            )
+            val response = fireStoreService.getListImage(email)
+            call.respond(response)
+        }
+
     }
 }

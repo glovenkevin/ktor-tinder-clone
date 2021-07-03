@@ -72,15 +72,8 @@ Response:
 
 ### Get List Image Firestore
 Request:
-- Method: POST
-- Endpoint: `/api/v1/fireStore`
-- Body:
-
-```json
-{
-  "email": "Email user tes@tes.com di firebase"
-}
-```
+- Method: GET
+- Endpoint: `/api/v1/fireStore/getListImage/{email}`
 
 Response:
 
@@ -141,7 +134,8 @@ Request:
 ```json
 {
   "age": 23,
-  "gender": "Male/Female"
+  "gender": "Male/Female",
+  "userName": "userName milik user"
 }
 ```
 
@@ -154,3 +148,9 @@ Response:
   "about": "Bio si user"
 }
 ```
+
+### Triger Notification
+
+
+### Update Like or Skip
+

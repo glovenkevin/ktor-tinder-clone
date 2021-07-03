@@ -3,6 +3,7 @@ package com.sc.coding.service
 import com.google.firebase.cloud.FirestoreClient
 import com.sc.coding.model.request.ImageParameter
 import com.sc.coding.model.request.InsertImage
+import com.sc.coding.model.response.ImageResponse
 import com.sc.coding.model.response.Response
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -56,7 +57,7 @@ class FireStoreService {
             val document = future.get()
 
             if (document.exists()) {
-                var imageString = document.getString("image_$seq") ?: ""
+                val imageString = document.getString("image_$seq") ?: ""
                 if (imageString.isNotBlank()) {
                     rtn = Base64.getDecoder().decode(imageString)
                 } else {
@@ -85,8 +86,17 @@ class FireStoreService {
         val response = Response(200, "Success")
         try {
             val docRef = db.collection(IMAGE_COLLECTION).document(obj.email)
-            val res = docRef.set(dataImage)
-            log.info("Update time: ${res.get().updateTime}")
+            val future = docRef.get()
+            val doc = future.get()
+
+            if (doc.exists()) {
+                val res = docRef.update(dataImage)
+                log.info("Update time: ${res.get().updateTime}")
+            } else {
+                val res = docRef.set(dataImage)
+                log.info("Update time: ${res.get().updateTime}")
+            }
+
         } catch (e: Exception) {
             e.printStackTrace()
             response.code = 503
@@ -96,4 +106,24 @@ class FireStoreService {
         return response
     }
 
+    fun getListImage(email: String): Response {
+        val response = Response(200, "Success", emptyArray<ImageResponse>())
+        try {
+
+            val docRef = db.collection(IMAGE_COLLECTION).document(email)
+            val future = docRef.get()
+            val doc = future.get()
+
+            val tempArray = mutableListOf<ImageResponse>()
+            if (doc.exists()) for (key in 1..9) {
+                if (!doc.getString("image_$key").isNullOrBlank()) tempArray.add(
+                    ImageResponse(key.toString(), doc.get("image_$key").toString())
+                )
+            }
+            response.data = tempArray
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return response
+    }
 }
