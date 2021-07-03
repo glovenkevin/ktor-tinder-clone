@@ -6,6 +6,7 @@ import io.ktor.routing.*
 fun Route.apiGate() {
     route("/api/v1") {
         fireStoreRoute()
+        userAccountRoute()
     }
 }
 

@@ -1,4 +1,6 @@
 # API SPEC
+For your information: Letakan service account json di folder 
+resources dengan nama `firebase-key.json`.
 
 ## API Endpoint v1
 
@@ -20,7 +22,7 @@ Response:
 
 ```json
 {
-  "code": "200 atau 504",
+  "code": "200 atau 503",
   "status": "Success or Bad Request"
 }
 ```
@@ -42,7 +44,7 @@ Response:
 
 ```json
 {
-  "code": "200 atau 504",
+  "code": "200 atau 503",
   "status": "Success or Bad Request"
 }
 ```
@@ -53,9 +55,20 @@ Request:
 - Endpoint: `/api/v1/fireStore/getImage/{email}/{seq}`
 
 Response:
-- Content-Type: image/png
-- code: 200
-- status: Success
+- Success Response
+    - Content-Type: image/png
+    - code: 200
+    - status: Success
+    - body: `ByteArray`
+- Error Response
+
+```json
+{
+  "code": "200 atau 503",
+  "status": "Bad Request",
+  "data": "Gambar tidak ditemukan"
+}
+```
 
 ### Get List Image Firestore
 Request:
@@ -73,7 +86,7 @@ Response:
 
 ```json
 {
-  "code": "200 atau 504",
+  "code": "200 atau 503",
   "status": "Success or Bad Request",
   "data": [
     {
@@ -96,12 +109,38 @@ Request:
 
 ```json
 {
-  "about": "Email user tes@tes.com di firebase",
+  "email": "email user",
+  "userName": "Username baru",
+  "firstName": "firstName user",
+  "about": "Tentang / Biografi / penjelasan singkat si user",
   "passion": "Passion data",
   "jobTitle": "Job title here",
   "company": "company name",
   "school": "nama sekolah",
   "city": "nama kota",
+  "gender": "Man/Woman",
+  "birthDay": "Tanggal YYYY-MMM-D atau 2000-05-20"
+}
+```
+
+Response:
+
+```json
+{
+  "code": "200 atau 503",
+  "status": "Success or Bad Request"
+}
+```
+
+### Get Random Bio
+Request:
+- Method: POST
+- Endpoint: `/api/v1/userAccount/getRandomBio`
+- Body:
+
+```json
+{
+  "age": 23,
   "gender": "Male/Female"
 }
 ```
@@ -110,7 +149,8 @@ Response:
 
 ```json
 {
-  "code": "200 atau 504",
-  "status": "Success or Bad Request"
+  "userName": "Username si user",
+  "age": 20,
+  "about": "Bio si user"
 }
 ```

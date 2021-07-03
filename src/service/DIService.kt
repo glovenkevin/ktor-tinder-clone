@@ -6,4 +6,5 @@ import org.kodein.di.singleton
 
 fun DI.MainBuilder.bindServices() {
     bind<FireStoreService>() with singleton { FireStoreService() }
+    bind<UserAccountService>() with singleton { UserAccountService() }
 }

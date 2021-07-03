@@ -28,8 +28,17 @@ class FireStoreService {
         val response = Response(200, "Success")
         try {
             val docRef = db.collection(IMAGE_COLLECTION).document(obj.email)
-            val res = docRef.update(dataImage)
-            log.info("Update time: ${res.get().updateTime}")
+            val future = docRef.get()
+            val doc = future.get()
+
+            if (doc.exists()) {
+                val res = docRef.update(dataImage)
+                log.debug("Update time: ${res.get().updateTime}")
+            } else {
+                val res = docRef.set(dataImage)
+                log.debug("Update time: ${res.get().updateTime}")
+            }
+
         } catch (e: Exception) {
             e.printStackTrace()
             response.code = 503
