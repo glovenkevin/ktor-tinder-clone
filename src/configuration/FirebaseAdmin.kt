@@ -11,6 +11,7 @@ object FirebaseAdmin {
 
     private val options: FirebaseOptions = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+        .setStorageBucket("tinder-clone-cb4b0.appspot.com")
         .build()
 
     fun init(): FirebaseApp = FirebaseApp.initializeApp(options)

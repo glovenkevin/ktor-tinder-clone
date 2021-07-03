@@ -47,6 +47,16 @@ Response:
 }
 ```
 
+### Get Image Firestore
+Request:
+- Method: POST
+- Endpoint: `/api/v1/fireStore/getImage/{email}/{seq}`
+
+Response:
+- Content-Type: image/png
+- code: 200
+- status: Success
+
 ### Get List Image Firestore
 Request:
 - Method: POST
