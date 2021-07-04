@@ -1,15 +1,16 @@
 package com.sc.coding.service
 
-import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.Query
 import com.google.cloud.firestore.QueryDocumentSnapshot
-import com.google.cloud.firestore.QuerySnapshot
 import com.google.firebase.cloud.FirestoreClient
+import com.sc.coding.configuration.GlobalConfiguration.USER_INFORMATION
+import com.sc.coding.configuration.GlobalConfiguration.USER_RANDOM_SHOW
 import com.sc.coding.model.entity.DataUserRandomShowEntity
-import com.sc.coding.model.request.RandomUserParam
-import com.sc.coding.model.request.UserAccountUpdate
-import com.sc.coding.model.response.RandomUserInfo
+import com.sc.coding.model.request.RandomUserRequest
+import com.sc.coding.model.entity.UserAccountInfoEntity
+import com.sc.coding.model.response.RandomUserInfoResponse
 import com.sc.coding.model.response.Response
+import com.sc.coding.model.response.UserAccountInfoResponse
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -17,10 +18,8 @@ class UserAccountService {
 
     private val log = LoggerFactory.getLogger(UserAccountService::class.java)
     private val db = FirestoreClient.getFirestore()
-    private val USER_INFORMATION = "USER_INFORMATION"
-    private val USER_RANDOM_SHOW = "USER_RANDOM_SHOW"
 
-    fun insertOrUpdateInformation(obj: UserAccountUpdate): Response {
+    fun insertOrUpdateInformation(obj: UserAccountInfoEntity): Response {
 
         val mapUserInfo = mapOf(
             "firstName" to obj.firstName,
@@ -39,7 +38,7 @@ class UserAccountService {
         val keys = mapUserInfo.keys
         for (k in keys) {
             if (!mapUserInfo[k].isNullOrBlank()) {
-                checkedMapUserInfo.put(k, mapUserInfo[k].toString())
+                checkedMapUserInfo[k] = mapUserInfo[k].toString()
             }
         }
 
@@ -47,7 +46,7 @@ class UserAccountService {
             val year = obj.birthDay.split("-")[0].toInt()
             val currentYear = Calendar.getInstance().get(Calendar.YEAR)
             val age = currentYear - year
-            checkedMapUserInfo.put("age", age)
+            checkedMapUserInfo["age"] = age
         }
 
         log.debug("User Account Data: $obj")
@@ -75,6 +74,45 @@ class UserAccountService {
         return response
     }
 
+    fun getUserAccountInfo(email: String): Response {
+        val response = Response(200, "Success")
+        try {
+
+            val docRef = db.collection(USER_INFORMATION).document(email)
+            val future = docRef.get()
+            val doc = future.get()
+
+            if (doc.exists()) {
+                val userInfo = doc.toObject(UserAccountInfoEntity::class.java)
+                if (null != userInfo) {
+                    response.data = UserAccountInfoResponse(
+                        userName = userInfo.userName,
+                        firstName = userInfo.firstName,
+                        about = userInfo.about,
+                        passion = userInfo.passion,
+                        jobTitle = userInfo.jobTitle,
+                        company = userInfo.company,
+                        school = userInfo.school,
+                        city = userInfo.city,
+                        gender = userInfo.gender,
+                        birthDay = userInfo.birthDay
+                    )
+                } else {
+                    response.data = "User info not found"
+                }
+            } else {
+                response.data = "User info not found"
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            response.code = 500
+            response.status = "Error"
+            response.data = e.localizedMessage
+        }
+        return response
+    }
+
     /*
         rule:
         1. show by age and gender
@@ -94,8 +132,8 @@ class UserAccountService {
             - update current showed user and return the username
         4. return the result
      */
-    fun getRandomUser(param: RandomUserParam): Response {
-        val response = Response(200, "Success", RandomUserInfo())
+    fun getRandomUser(param: RandomUserRequest): Response {
+        val response = Response(200, "Success", RandomUserInfoResponse())
         try {
 
             if (param.age == 0 || param.gender.isBlank()
@@ -189,12 +227,12 @@ class UserAccountService {
         return response
     }
 
-    private fun updateRandomShowUser(docData: QueryDocumentSnapshot): RandomUserInfo {
+    private fun updateRandomShowUser(docData: QueryDocumentSnapshot): RandomUserInfoResponse {
         val email = docData.id
         val userName = docData.get("userName").toString()
         val about = docData.get("about").toString()
         val age = docData.get("age").toString().toInt()
-        return RandomUserInfo(email, userName, age, about)
+        return RandomUserInfoResponse(email, userName, age, about)
     }
 
 }

@@ -1,7 +1,8 @@
 package com.sc.coding.route
 
-import com.sc.coding.model.request.RandomUserParam
-import com.sc.coding.model.request.UserAccountUpdate
+import com.sc.coding.model.request.RandomUserRequest
+import com.sc.coding.model.entity.UserAccountInfoEntity
+import com.sc.coding.model.response.Response
 import com.sc.coding.service.UserAccountService
 import io.ktor.application.*
 import io.ktor.request.*
@@ -15,16 +16,26 @@ fun Route.userAccountRoute() {
     val userAccountService by di().instance<UserAccountService>()
 
     route("/userAccount") {
+
+        get("/{email}") {
+            val email = call.parameters["email"] ?: return@get call.respond(
+                Response(504, "Bad Request", "Data tidak lengkap")
+            )
+            val response = userAccountService.getUserAccountInfo(email)
+            call.respond(response)
+        }
+
         post("/update") {
-            val userAccountUpdate = call.receive<UserAccountUpdate>()
+            val userAccountUpdate = call.receive<UserAccountInfoEntity>()
             val response = userAccountService.insertOrUpdateInformation(userAccountUpdate)
             call.respond(response)
         }
 
         post("/getRandomUser") {
-            val param = call.receive<RandomUserParam>()
+            val param = call.receive<RandomUserRequest>()
             val response = userAccountService.getRandomUser(param)
             call.respond(response)
         }
+
     }
 }

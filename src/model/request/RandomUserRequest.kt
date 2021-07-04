@@ -1,6 +1,6 @@
 package com.sc.coding.model.request
 
-data class RandomUserParam(
+data class RandomUserRequest(
     val age: Int = 0,
     val gender: String = "",
     val userName: String = "",

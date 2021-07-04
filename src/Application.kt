@@ -31,6 +31,7 @@ fun Application.module(testing: Boolean = false) {
         header(HttpHeaders.AccessControlAllowHeaders)
         header(HttpHeaders.AccessControlAllowOrigin)
         header(HttpHeaders.ContentType)
+        header("key") // Token From Header
     }
 
     install(CallLogging) {

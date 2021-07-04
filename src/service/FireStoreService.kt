@@ -1,8 +1,8 @@
 package com.sc.coding.service
 
 import com.google.firebase.cloud.FirestoreClient
-import com.sc.coding.model.request.ImageParameter
-import com.sc.coding.model.request.InsertImage
+import com.sc.coding.model.request.ImageParameterRequest
+import com.sc.coding.model.request.InsertImageRequest
 import com.sc.coding.model.response.ImageResponse
 import com.sc.coding.model.response.Response
 import org.slf4j.LoggerFactory
@@ -14,7 +14,7 @@ class FireStoreService {
     private val db = FirestoreClient.getFirestore()
     private val IMAGE_COLLECTION = "IMAGE_COLLECTION"
 
-    fun insertData(obj: InsertImage): Response {
+    fun insertData(obj: InsertImageRequest): Response {
 
         if (obj.email.isBlank()
             || obj.imageBase64.isBlank()
@@ -73,7 +73,7 @@ class FireStoreService {
         return rtn
     }
 
-    fun removeData(obj: ImageParameter): Response {
+    fun removeData(obj: ImageParameterRequest): Response {
         if (obj.email.isBlank()
             || obj.seq.isBlank()) {
             return Response(503, "Bad Request", "Data tidak lengkap")

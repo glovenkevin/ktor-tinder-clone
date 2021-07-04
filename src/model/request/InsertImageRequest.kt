@@ -3,7 +3,8 @@ package com.sc.coding.model.request
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 @JsonSerialize
-data class ImageParameter(
+data class InsertImageRequest(
     val email: String,
+    val imageBase64: String,
     val seq: String
 )

@@ -7,6 +7,7 @@ fun Route.apiGate() {
     route("/api/v1") {
         fireStoreRoute()
         userAccountRoute()
+        notificationRoute()
     }
 }
 

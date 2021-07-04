@@ -1,7 +1,7 @@
 package com.sc.coding.route
 
-import com.sc.coding.model.request.InsertImage
-import com.sc.coding.model.request.ImageParameter
+import com.sc.coding.model.request.InsertImageRequest
+import com.sc.coding.model.request.ImageParameterRequest
 import com.sc.coding.model.response.Response
 import com.sc.coding.service.FireStoreService
 import io.ktor.application.*
@@ -19,7 +19,7 @@ fun Route.fireStoreRoute() {
     route("/fireStore") {
 
         post("/add") {
-            val insertImage = call.receive<InsertImage>()
+            val insertImage = call.receive<InsertImageRequest>()
             val response = fireStoreService.insertData(insertImage)
             call.respond(response)
         }
@@ -41,7 +41,7 @@ fun Route.fireStoreRoute() {
         }
 
         post("/remove") {
-            val removeImage = call.receive<ImageParameter>()
+            val removeImage = call.receive<ImageParameterRequest>()
             val response = fireStoreService.removeData(removeImage)
             call.respond(response)
         }

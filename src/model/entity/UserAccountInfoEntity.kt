@@ -1,6 +1,6 @@
-package com.sc.coding.model.request
+package com.sc.coding.model.entity
 
-data class UserAccountUpdate(
+data class UserAccountInfoEntity(
     val email: String = "",
     val firstName: String = "",
     val userName: String = "",

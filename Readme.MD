@@ -1,6 +1,7 @@
 # API SPEC
 For your information: Letakan service account json di folder 
-resources dengan nama `firebase-key.json`.
+resources dengan nama `firebase-key.json`. Config untuk firebase aktifkan fitur
+`firestore`.
 
 ## API Endpoint v1
 
@@ -112,7 +113,7 @@ Request:
   "school": "nama sekolah",
   "city": "nama kota",
   "gender": "Man/Woman",
-  "birthDay": "Tanggal YYYY-MMM-D atau 2000-05-20"
+  "birthDay": "2000-05-20"
 }
 ```
 
@@ -122,6 +123,32 @@ Response:
 {
   "code": "200 atau 503",
   "status": "Success or Bad Request"
+}
+```
+
+### Get User Info
+Request:
+- Method: GET
+- Endpoint: `/api/v1/userAccount/{email}`
+
+Response:
+
+```json
+{
+  "code": "200 atau 503",
+  "status": "Success or Bad Request",
+  "data": {
+    "userName": "Username baru",
+    "firstName": "firstName user",
+    "about": "Tentang / Biografi / penjelasan singkat si user",
+    "passion": "Passion data",
+    "jobTitle": "Job title here",
+    "company": "company name",
+    "school": "nama sekolah",
+    "city": "nama kota",
+    "gender": "Man/Woman",
+    "birthDay": "2000-05-20"
+  }
 }
 ```
 
@@ -173,5 +200,23 @@ Response Not Found/No user to be showed:
 
 ### Triger Notification
 Request:
+- Method: POST
+- Endpoint: `/api/v1/notification/send`
+- Body:
+
+```json
+{
+  "email": "email user yang dituju",
+  "title": "Judul pesan",
+  "message": "Konten yang mau disampaikan ke user tertentu"
+}
+```
 
 Response:
+
+```json
+{
+  "code": "200 or 503",
+  "status": "Success or Failed"
+}
+```
