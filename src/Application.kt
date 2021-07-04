@@ -8,6 +8,7 @@ import io.ktor.application.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.features.*
+import io.ktor.http.*
 import io.ktor.jackson.*
 import io.ktor.request.*
 import org.kodein.di.ktor.di
@@ -20,6 +21,17 @@ fun main(args: Array<String>): Unit = io.ktor.server.cio.EngineMain.main(args)
 fun Application.module(testing: Boolean = false) {
 
     HttpClient(CIO)
+
+    install(DefaultHeaders)
+    install(CORS) {
+        anyHost()
+        method(HttpMethod.Post)
+        method(HttpMethod.Get)
+        method(HttpMethod.Delete)
+        header(HttpHeaders.AccessControlAllowHeaders)
+        header(HttpHeaders.AccessControlAllowOrigin)
+        header(HttpHeaders.ContentType)
+    }
 
     install(CallLogging) {
         level = Level.INFO

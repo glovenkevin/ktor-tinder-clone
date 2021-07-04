@@ -13,7 +13,7 @@ Request:
 ```json
 {
   "email": "email autentikasi user firebase",
-  "imageBase62": "String base64 gambar",
+  "imageBase64": "String base64 gambar",
   "seq": "sequence gambar 1,2,3...9"  
 }
 ```
@@ -83,12 +83,12 @@ Response:
   "status": "Success or Bad Request",
   "data": [
     {
-      "seq": "seq gambar 1",
-      "imageBase64": "String base64 gambar"
+      "seq": "1",
+      "imageBase64": "/9j/4AAQSkZJRgABAQAAAQA..."
     },
     {
-      "seq": "seq gambar 2",
-      "imageBase64": "String base64 gambar"
+      "seq": "2",
+      "imageBase64": "/9j/4AAQSkZJRgABAQAAAQA..."
     }
   ]
 }
@@ -128,29 +128,50 @@ Response:
 ### Get Random Bio
 Request:
 - Method: POST
-- Endpoint: `/api/v1/userAccount/getRandomBio`
+- Endpoint: `/api/v1/userAccount/getRandomUser`
 - Body:
 
 ```json
 {
   "age": 23,
   "gender": "Male/Female",
-  "userName": "userName milik user"
+  "userName": "userName milik user",
+  "email": "email user dipakai sebagai key",
+  "status": "Y or N, kosongi jika pertama kali get"
 }
 ```
 
-Response:
+Response Success:
 
 ```json
 {
-  "userName": "Username si user",
-  "age": 20,
-  "about": "Bio si user"
+  "code": "200",
+  "status": "Success",
+  "data": {
+    "email": "email user terpilih",
+    "userName": "Username si user",
+    "age": 20,
+    "about": "Bio si user"
+  }
+}
+```
+
+Response Not Found/No user to be showed:
+
+```json
+{
+  "code": "200",
+  "status": "Success",
+  "data": {
+    "email": "",
+    "userName": "",
+    "age": 0,
+    "about": ""
+  }
 }
 ```
 
 ### Triger Notification
+Request:
 
-
-### Update Like or Skip
-
+Response:
