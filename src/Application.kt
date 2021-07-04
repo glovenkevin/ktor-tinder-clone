@@ -21,6 +21,10 @@ fun Application.module(testing: Boolean = false) {
 
     HttpClient(CIO)
 
+    install(CORS) {
+        anyHost()
+    }
+
     install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
