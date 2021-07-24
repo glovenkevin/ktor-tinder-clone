@@ -1,5 +1,6 @@
 package com.sc.coding.route
 
+import com.sc.coding.configuration.MessageInfo
 import com.sc.coding.model.request.RandomUserRequest
 import com.sc.coding.model.entity.UserAccountInfoEntity
 import com.sc.coding.model.response.Response
@@ -19,8 +20,13 @@ fun Route.userAccountRoute() {
 
         get("/{email}") {
             val email = call.parameters["email"] ?: return@get call.respond(
-                Response(504, "Bad Request", "Data tidak lengkap")
+                Response(400, MessageInfo.MSG_ERR, "Data tidak lengkap")
             )
+
+            if (email.trim().isBlank()) return@get call.respond(
+                Response(400, MessageInfo.MSG_ERR, "Data tidak lengkap")
+            )
+
             val response = userAccountService.getUserAccountInfo(email)
             call.respond(response)
         }

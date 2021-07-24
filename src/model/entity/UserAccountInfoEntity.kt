@@ -1,5 +1,9 @@
 package com.sc.coding.model.entity
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+
 data class UserAccountInfoEntity(
     val email: String = "",
     val firstName: String = "",

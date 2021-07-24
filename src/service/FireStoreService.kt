@@ -1,6 +1,7 @@
 package com.sc.coding.service
 
 import com.google.firebase.cloud.FirestoreClient
+import com.sc.coding.configuration.MessageInfo
 import com.sc.coding.model.request.ImageParameterRequest
 import com.sc.coding.model.request.InsertImageRequest
 import com.sc.coding.model.response.ImageResponse
@@ -19,14 +20,14 @@ class FireStoreService {
         if (obj.email.isBlank()
             || obj.imageBase64.isBlank()
             || obj.seq.isBlank()) {
-            return Response(503, "Bad Request", "Data tidak lengkap")
+            return Response(400, MessageInfo.MSG_ERR, "Data tidak lengkap")
         }
 
         val dataImage = mapOf(
             "image_${obj.seq}" to obj.imageBase64
         )
 
-        val response = Response(200, "Success")
+        val response = Response(200, MessageInfo.MSG_OK)
         try {
             val docRef = db.collection(IMAGE_COLLECTION).document(obj.email)
             val future = docRef.get()
@@ -42,8 +43,8 @@ class FireStoreService {
 
         } catch (e: Exception) {
             e.printStackTrace()
-            response.code = 503
-            response.status = "Bad Request"
+            response.code = 400
+            response.status = MessageInfo.MSG_ERR
             response.data = e.localizedMessage
         }
         return response
@@ -76,14 +77,14 @@ class FireStoreService {
     fun removeData(obj: ImageParameterRequest): Response {
         if (obj.email.isBlank()
             || obj.seq.isBlank()) {
-            return Response(503, "Bad Request", "Data tidak lengkap")
+            return Response(400, MessageInfo.MSG_ERR, "Data tidak lengkap")
         }
 
         val dataImage = mapOf(
             "image_${obj.seq}" to ""
         )
 
-        val response = Response(200, "Success")
+        val response = Response(200, MessageInfo.MSG_OK)
         try {
             val docRef = db.collection(IMAGE_COLLECTION).document(obj.email)
             val future = docRef.get()
@@ -99,15 +100,15 @@ class FireStoreService {
 
         } catch (e: Exception) {
             e.printStackTrace()
-            response.code = 503
-            response.status = "Bad Request"
+            response.code = 400
+            response.status = MessageInfo.MSG_ERR
             response.data = e.localizedMessage
         }
         return response
     }
 
     fun getListImage(email: String): Response {
-        val response = Response(200, "Success", emptyArray<ImageResponse>())
+        val response = Response(200, MessageInfo.MSG_OK, emptyArray<ImageResponse>())
         try {
 
             val docRef = db.collection(IMAGE_COLLECTION).document(email)

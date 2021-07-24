@@ -5,6 +5,7 @@ import com.google.cloud.firestore.QueryDocumentSnapshot
 import com.google.firebase.cloud.FirestoreClient
 import com.sc.coding.configuration.GlobalConfiguration.USER_INFORMATION
 import com.sc.coding.configuration.GlobalConfiguration.USER_RANDOM_SHOW
+import com.sc.coding.configuration.MessageInfo
 import com.sc.coding.model.entity.DataUserRandomShowEntity
 import com.sc.coding.model.request.RandomUserRequest
 import com.sc.coding.model.entity.UserAccountInfoEntity
@@ -20,7 +21,11 @@ class UserAccountService {
     private val db = FirestoreClient.getFirestore()
 
     fun insertOrUpdateInformation(obj: UserAccountInfoEntity): Response {
-
+        
+        if (obj.email.isBlank()) {
+            return Response(400, MessageInfo.MSG_ERR, "Email kosong")
+        }
+        
         val mapUserInfo = mapOf(
             "firstName" to obj.firstName,
             "userName" to obj.userName,
@@ -49,6 +54,10 @@ class UserAccountService {
             checkedMapUserInfo["age"] = age
         }
 
+        if (checkedMapUserInfo.isEmpty()) {
+            return Response(400, MessageInfo.MSG_ERR, "No data to update")
+        }
+
         log.debug("User Account Data: $obj")
 
         val response = Response(200, "Success")
@@ -67,7 +76,7 @@ class UserAccountService {
         } catch (e: Exception) {
             e.printStackTrace()
             response.code = 500
-            response.status = "Error"
+            response.status = MessageInfo.MSG_INT_ERR
             response.data = e.localizedMessage
         }
 
@@ -107,7 +116,7 @@ class UserAccountService {
         } catch (e: Exception) {
             e.printStackTrace()
             response.code = 500
-            response.status = "Error"
+            response.status = MessageInfo.MSG_INT_ERR
             response.data = e.localizedMessage
         }
         return response
@@ -138,8 +147,8 @@ class UserAccountService {
 
             if (param.age == 0 || param.gender.isBlank()
                 || param.userName.isBlank() || param.email.isBlank()) {
-                response.code = 503
-                response.status = "Bad Request"
+                response.code = 400
+                response.status = MessageInfo.MSG_ERR
                 response.data = "Data tidak lengkap"
                 return response
             }
@@ -151,8 +160,8 @@ class UserAccountService {
             if (docRandomShow.exists()) {
 
                 if (param.status.isBlank()) {
-                    response.code = 503
-                    response.status = "Bad Request"
+                    response.code = 400
+                    response.status = MessageInfo.MSG_ERR
                     response.data = "Status belum terisi"
                     return response
                 }
@@ -223,6 +232,9 @@ class UserAccountService {
 
         } catch (e: Exception) {
             e.printStackTrace()
+            response.code = 500
+            response.status = MessageInfo.MSG_INT_ERR
+            response.data = e.localizedMessage
         }
         return response
     }

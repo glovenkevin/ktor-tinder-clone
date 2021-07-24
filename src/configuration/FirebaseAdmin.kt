@@ -14,5 +14,11 @@ object FirebaseAdmin {
         .setStorageBucket("tinder-clone-cb4b0.appspot.com")
         .build()
 
-    fun init(): FirebaseApp = FirebaseApp.initializeApp(options)
+    fun init(): FirebaseApp {
+        return if (FirebaseApp.getApps().isEmpty()) {
+            FirebaseApp.initializeApp(options)
+        } else {
+            FirebaseApp.getInstance()
+        }
+    }
 }
