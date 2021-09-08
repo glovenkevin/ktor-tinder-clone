@@ -4,6 +4,8 @@ on:
     branches: [ github-action ]
   pull_request:
     branches: [ github-action ]
+env:
+  SERVER: staging
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -19,3 +21,23 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+  Deploy-Staging:
+    name: Staging Workflow
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello World"
+      - name: Setup JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Move to repository
+        run: cd ${{ github.workspace }}
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      - name: build project
+        run: ./gradlew clean installDist
+      - name: Check List File
+        run: ls
