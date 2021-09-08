@@ -6,3 +6,4 @@
 *.ipr
 *.iws
 firebase-key.json
+.DS_STORE
