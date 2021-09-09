@@ -56,7 +56,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build.tar, Dockerfile.example"
+          source: "build.tar,Dockerfile.example"
           target: "tinder-clone"
 
       - name: Final build and deploy on container
