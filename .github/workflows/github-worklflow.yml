@@ -47,7 +47,7 @@ jobs:
         run: ls
 
       - name: Create Tar file
-        run: tar cf build.tar build/install/tinder-clone
+        run: tar czf build.tar.gz ./build/install/tinder-clone/
 
       - name: Copy Builded File using scp
         uses: appleboy/scp-action@master
@@ -55,7 +55,26 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
-          #password: ${{ secrets.SSH_PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build.tar"
-          target: "tinder-clone.tar"
+          source: "build.tar, Dockerfile.example"
+          target: "tinder-clone"
+
+      - name: Final build and deploy on container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd tinder-clone
+            tar xzf
+            mv Dockerfile.example Dockerfile
+
+      - name: Send Notification Discord
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.WEBHOOK_DISCORD_ID }}
+          webhook_token: ${{ secrets.WEBHOOK_DISCORD_TOKEN }}
+          username: "GitHub Bot"
+          message: "testing"
