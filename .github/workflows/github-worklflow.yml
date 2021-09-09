@@ -6,6 +6,9 @@ on:
     branches: [ github-action ]
 env:
   SERVER: staging
+  CONTAINER_NAME: tinder-clone-ws
+  IMAGE: tinder-clone-ws
+  IMAGE_TAG: "1.0"
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -66,10 +69,21 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          env: CONTAINER_NAME,IMAGE,IMAGE_TAG
+          script_stop: true
           script: |
             cd tinder-clone
             tar xzf build.tar.gz
+            mv build/install/tinder-clone/ .
+            rm -f build
             mv Dockerfile.example Dockerfile
+            rm -f $CONTAINER_NAME && echo "Container removed" || echo "Container does not exist"
+            docker build -t $IMAGE:$IMAGE_TAG .
+            docker run -dp 280:80 \
+              --restart unless-stopped \
+              --name $CONTAINER_NAME \
+              --network klasster-dev \
+              $IMAGE:1.0
 
       - name: Send Notification Discord
         uses: appleboy/discord-action@master
