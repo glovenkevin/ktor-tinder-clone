@@ -69,13 +69,13 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          env: CONTAINER_NAME,IMAGE,IMAGE_TAG
+          envs: CONTAINER_NAME,IMAGE,IMAGE_TAG
           script_stop: true
           script: |
             cd tinder-clone
             tar xzf build.tar.gz
             mv build/install/tinder-clone/ .
-            rm -f build
+            rm -r build
             mv Dockerfile.example Dockerfile
             rm -f $CONTAINER_NAME && echo "Container removed" || echo "Container does not exist"
             docker build -t $IMAGE:$IMAGE_TAG .
@@ -84,11 +84,22 @@ jobs:
               --name $CONTAINER_NAME \
               --network klasster-dev \
               $IMAGE:1.0
+            docker image prune -f
 
-      - name: Send Notification Discord
+      - name: Send Notification Success Discord
         uses: appleboy/discord-action@master
+        if: ${{ success() }}
         with:
           webhook_id: ${{ secrets.WEBHOOK_DISCORD_ID }}
           webhook_token: ${{ secrets.WEBHOOK_DISCORD_TOKEN }}
           username: "GitHub Bot"
-          message: "testing"
+          message: "Success build and deploy on server for branch ${{ github.ref }} \nBuild Number: ${{ github.run_number }} \nResult: ${{ job.status }}"
+
+      - name: Send Notification Fail Discord
+        uses: appleboy/discord-action@master
+        if: ${{ failure() }}
+        with:
+          webhook_id: ${{ secrets.WEBHOOK_DISCORD_ID }}
+          webhook_token: ${{ secrets.WEBHOOK_DISCORD_TOKEN }}
+          username: "GitHub Bot"
+          message: "Failed build and deploy on server for branch ${{ github.ref }} \nBuild Number: ${{ github.run_number }} \nResult: ${{ job.status }}"
