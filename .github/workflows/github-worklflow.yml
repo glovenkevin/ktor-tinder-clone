@@ -1,14 +1,17 @@
-name: GitHub Actions Demo
+name: Github Workfow Continues Development (CD)
+
 on:
   push:
     branches: [ github-action ]
   pull_request:
-    branches: [ github-action ]
+    branches: [ master ]
+
 env:
   SERVER: staging
   CONTAINER_NAME: tinder-clone-ws
   IMAGE: tinder-clone-ws
   IMAGE_TAG: "1.0"
+
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -24,6 +27,7 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+
   Deploy-Staging:
     name: Staging Workflow
     runs-on: ubuntu-latest
@@ -77,7 +81,7 @@ jobs:
             mv build/install/tinder-clone/ .
             rm -r build
             mv Dockerfile.example Dockerfile
-            rm -f $CONTAINER_NAME && echo "Container removed" || echo "Container does not exist"
+            docker rm -f $CONTAINER_NAME && echo "Container removed" || echo "Container does not exist"
             docker build -t $IMAGE:$IMAGE_TAG .
             docker run -dp 280:80 \
               --restart unless-stopped \
