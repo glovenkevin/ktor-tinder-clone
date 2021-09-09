@@ -56,7 +56,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build.tar,Dockerfile.example"
+          source: "build.tar.gz,Dockerfile.example"
           target: "tinder-clone"
 
       - name: Final build and deploy on container
@@ -68,7 +68,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd tinder-clone
-            tar xzf
+            tar xzf build.tar.gz
             mv Dockerfile.example Dockerfile
 
       - name: Send Notification Discord
