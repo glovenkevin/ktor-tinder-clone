@@ -63,6 +63,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          rm: true
           source: "build.tar.gz,Dockerfile.example"
           target: "tinder-clone"
 
