@@ -46,13 +46,16 @@ jobs:
       - name: Check List File
         run: ls
 
+      - name: Create Tar file
+        run: tar cf build.tar build/install/tinder-clone
+
       - name: Copy Builded File using scp
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           #password: ${{ secrets.SSH_PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "build/install/tinder-clone"
-          target: "tinder-clone"
+          source: "build.tar"
+          target: "tinder-clone.tar"
