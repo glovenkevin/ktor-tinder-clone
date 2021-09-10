@@ -29,6 +29,14 @@ jobs:
       - name: Move to repository
         run: cd ${{ github.workspace }}
 
+      - name: Decrypt firebase key
+        run: ./.github/scripts/decrypt_secret.sh
+        env:
+          SECRET_PASSPHRASE: ${{ secrets.FIREBASE_PHASEPHRASE }}
+
+      - name: Check list resources file
+        run: ls resources/
+
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
