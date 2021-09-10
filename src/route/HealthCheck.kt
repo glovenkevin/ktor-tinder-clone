@@ -7,7 +7,7 @@ import io.ktor.routing.*
 
 fun Route.healthCheck() {
 
-    route("/healthCheck") {
+    route("/health-check") {
         get {
             call.respond(Response(200, "OK"))
         }

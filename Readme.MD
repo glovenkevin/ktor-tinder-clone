@@ -1,14 +1,14 @@
 # API SPEC
 For your information: Letakan service account json di folder 
 resources dengan nama `firebase-key.json`. Config untuk firebase aktifkan fitur
-`firestore`.
+`fire-store`.
 
 ## API Endpoint v1
 
-### Insert/Update Image Firestore
+### Insert/Update Image fire-store
 Request:
 - Method: POST
-- Endpoint: `/api/v1/fireStore/add`
+- Endpoint: `/api/v1/fire-store/add`
 - Body:
 
 ```json
@@ -28,10 +28,10 @@ Response:
 }
 ```
 
-### Delete Image Firestore
+### Delete Image fire-store
 Request: 
 - Method: POST
-- Endpoint: `/api/v1/fireStore/remove`
+- Endpoint: `/api/v1/fire-store/remove`
 - Body:
 
 ```json
@@ -50,10 +50,10 @@ Response:
 }
 ```
 
-### Get Image Firestore
+### Get Image fire-store
 Request:
 - Method: POST
-- Endpoint: `/api/v1/fireStore/getImage/{email}/{seq}`
+- Endpoint: `/api/v1/fire-store/image/{email}/{seq}`
 
 Response:
 - Success Response
@@ -71,10 +71,10 @@ Response:
 }
 ```
 
-### Get List Image Firestore
+### Get List Image fire-store
 Request:
 - Method: GET
-- Endpoint: `/api/v1/fireStore/getListImage/{email}`
+- Endpoint: `/api/v1/fire-store/images/{email}`
 
 Response:
 
@@ -98,7 +98,7 @@ Response:
 ### Save/Update Account User
 Request:
 - Method: POST
-- Endpoint: `/api/v1/userAccount/update`
+- Endpoint: `/api/v1/user-account/update`
 - Body:
 
 ```json
@@ -129,7 +129,7 @@ Response:
 ### Get User Info
 Request:
 - Method: GET
-- Endpoint: `/api/v1/userAccount/{email}`
+- Endpoint: `/api/v1/user-account/{email}`
 
 Response:
 
@@ -155,7 +155,7 @@ Response:
 ### Get Random Bio
 Request:
 - Method: POST
-- Endpoint: `/api/v1/userAccount/getRandomUser`
+- Endpoint: `/api/v1/user-account/random-user`
 - Body:
 
 ```json
@@ -218,5 +218,19 @@ Response:
 {
   "code": "200 or 503",
   "status": "Success or Failed"
+}
+```
+
+### Health Check
+Request:
+- Method: GET
+- Endpoint: `/health-check`
+
+Response:
+
+```json
+{
+  "code": 200,
+  "status": "OK"
 }
 ```

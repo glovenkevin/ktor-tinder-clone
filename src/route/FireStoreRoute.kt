@@ -19,7 +19,7 @@ fun Route.fireStoreRoute() {
     val log = LoggerFactory.getLogger(this::class.java)
     val fireStoreService by di().instance<FireStoreService>()
 
-    route("/fireStore") {
+    route("/fire-store") {
 
         post("/add") {
             try {
@@ -32,7 +32,7 @@ fun Route.fireStoreRoute() {
             }
         }
 
-        get ("/getImage/{email}/{seq}") {
+        get ("/image/{email}/{seq}") {
             val email = call.parameters["email"] ?: return@get call.respond(
                 Response(400, MessageInfo.MSG_ERR, "Data tidak lengkap")
             )
@@ -59,7 +59,7 @@ fun Route.fireStoreRoute() {
             call.respond(response)
         }
 
-        get("/getListImage/{email}") {
+        get("/images/{email}") {
             val email = call.parameters["email"] ?: return@get call.respond(
                 Response(400, MessageInfo.MSG_ERR, "Data tidak lengkap")
             )

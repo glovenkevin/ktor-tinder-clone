@@ -16,7 +16,7 @@ fun Route.userAccountRoute() {
 
     val userAccountService by di().instance<UserAccountService>()
 
-    route("/userAccount") {
+    route("/user-account") {
 
         get("/{email}") {
             val email = call.parameters["email"] ?: return@get call.respond(
@@ -37,7 +37,7 @@ fun Route.userAccountRoute() {
             call.respond(response)
         }
 
-        post("/getRandomUser") {
+        post("/random-user") {
             val param = call.receive<RandomUserRequest>()
             val response = userAccountService.getRandomUser(param)
             call.respond(response)
